@@ -16,14 +16,14 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "O2UIToolkit"
+      name: "O2UIToolkit",
+      resources: [
+        .copy("Theme/Resources/Colors/Colors.xcassets")
+      ]
     ),
     .testTarget(
       name: "O2UIToolkitTests",
       dependencies: ["O2UIToolkit"],
-      resources: [
-        .copy("Theme/Colors/Colors.xcassets")
-      ]
     ),
   ]
 )
