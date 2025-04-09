@@ -18,7 +18,8 @@ let package = Package(
     .target(
       name: "O2UIToolkit",
       resources: [
-        .copy("Theme/Resources/Colors/Colors.xcassets")
+        .copy("Theme/Resources/Colors/Colors.xcassets"),
+        .process("Theme/Resources/FontResources")
       ]
     ),
     .testTarget(
