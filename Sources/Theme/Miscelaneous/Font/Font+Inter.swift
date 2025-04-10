@@ -10,8 +10,6 @@ extension Font {
     name: String,
     configuration: O2FontStyle.Configuration
   ) -> Font {
-    let fontFamilyName = name.components(separatedBy: "-").first ?? name
-
     let axis: [FontVariations: CGFloat] = [
       .weight: configuration.weight,
       .opticalSize: configuration.size
@@ -28,7 +26,7 @@ extension Font {
       variationAttributes[kCTFontVariationAttribute] = variations
     }
 
-    var descriptor = UIFontDescriptor(name: fontFamilyName, size: configuration.size)
+    var descriptor = UIFontDescriptor(name: name, size: configuration.size)
 
     if !variationAttributes.isEmpty {
       descriptor = descriptor.addingAttributes(
@@ -43,7 +41,7 @@ extension Font {
 
 extension Font {
   enum InterType: String, CaseIterable {
-    case variable = "Inter-VariableFont"
+    case variable = "Inter"
   }
 
   enum Inter {
