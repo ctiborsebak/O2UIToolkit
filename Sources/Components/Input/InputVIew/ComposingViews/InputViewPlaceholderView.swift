@@ -9,6 +9,8 @@ struct InputViewPlaceholderView: View {
   }
 }
 
+// MARK: - Previews
+
 #if DEBUG
 #Preview {
   InputViewPlaceholderView(placeholder: "Placeholder")

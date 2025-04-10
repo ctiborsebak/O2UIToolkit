@@ -1,42 +1,30 @@
 import SwiftUI
 
-/// An input view for a text entry.
-public struct InputViewConfiguration {
-  var text: Binding<String>
-  let title: String
-  let placeholder: String
-  let isOptional: Bool
-  let trailingActionButtonConfiguration: InputViewActionButtonConfiguration?
-
-  /// An input view for a text entry.
-  ///
+extension InputView {
   /// - Parameters:
-  ///   - text: A binding to a property that determines state of the search field.
-  ///   - title: Title dispplayed above the InputView.
-  ///   - placeholder: Placeholder text shown in the search field.
-  ///   - isOptional: Displays an optional label. Defaults to false.
-  ///   - trailingActionButtonConfiguration: Configuration of trailing button, the button is removed when set to nil. Defaults to nil.
+  ///   - configuration: A configuration of the view which will define its style as well as behavior.
   public init(
-    text: Binding<String>,
-    title: String,
-    placeholder: String,
-    isOptional: Bool = false,
-    trailingActionButtonConfiguration: InputViewActionButtonConfiguration? = nil
+    configuration: InputViewConfiguration
   ) {
-    self.text = text
-    self.title = title
-    self.placeholder = placeholder
-    self.isOptional = isOptional
-    self.trailingActionButtonConfiguration = trailingActionButtonConfiguration
+    self.configuration = configuration
+  }
+
+  init(
+    configuration: InputViewConfiguration,
+    isSecureTextEntry: Bool = false,
+    accentColor: Color? = nil
+  ) {
+    self.configuration = configuration
+    self.isSecureTextEntry = isSecureTextEntry
+    self.accentColor = accentColor
   }
 }
 
+/// An input view for a text entry.
 public struct InputView: View {
-  let configuration: InputViewConfiguration
-
-  public init(configuration: InputViewConfiguration) {
-    self.configuration = configuration
-  }
+  private let configuration: InputViewConfiguration
+  private var isSecureTextEntry: Bool = false
+  private var accentColor: Color? = nil
 
   @FocusState var isFocused: Bool
 
@@ -44,7 +32,8 @@ public struct InputView: View {
     VStack(alignment: .leading, spacing: .Spacing.XS) {
       InputViewHeaderView(
         title: configuration.title,
-        isOptional: configuration.isOptional
+        isOptional: configuration.isOptional,
+        accentColor: accentColor
       )
 
       HStack(alignment: .center, spacing: .Spacing.XS) {
@@ -54,7 +43,8 @@ public struct InputView: View {
           }
 
           BaseTextField(
-            text: configuration.text
+            text: configuration.text,
+            isSecureTextEntry: isSecureTextEntry
           )
           .focused($isFocused)
         }
@@ -62,18 +52,22 @@ public struct InputView: View {
         .padding([.leading, .vertical], .Spacing.S)
 
         if let trailingActionButtonConfiguration = configuration.trailingActionButtonConfiguration {
-          InputViewActionButton(configuration: trailingActionButtonConfiguration)
-            .padding([.vertical, .trailing], .Spacing.XS)
+          InputViewActionButton(
+            configuration: trailingActionButtonConfiguration,
+            isFocused: isFocused
+          )
+          .padding([.vertical, .trailing], .Spacing.XS)
         }
       }
       .background(
         ZStack {
           RoundedRectangle(cornerRadius: .CornerRadius.input)
-            .stroke(
-              isFocused ? Color.State.Default.focus : Color.Surface.xHigh,
-              lineWidth: 1
-            )
-            .blendMode(.plusDarker)
+            .stroke(Color.Surface.xHigh, lineWidth: 1)
+
+          if isFocused {
+            RoundedRectangle(cornerRadius: .CornerRadius.input)
+              .stroke(accentColor ?? Color.State.Default.focus, lineWidth: 1)
+          }
         }
       )
     }
