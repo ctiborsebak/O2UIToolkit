@@ -4,21 +4,27 @@
 import PackageDescription
 
 let package = Package(
-    name: "O2UIToolkit",
-    products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "O2UIToolkit",
-            targets: ["O2UIToolkit"]),
-    ],
-    targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "O2UIToolkit"),
-        .testTarget(
-            name: "O2UIToolkitTests",
-            dependencies: ["O2UIToolkit"]
-        ),
-    ]
+  name: "O2UIToolkit",
+  platforms: [
+    .iOS(.v17)
+  ],
+  products: [
+    .library(
+      name: "O2UIToolkit",
+      targets: ["O2UIToolkit"]
+    ),
+  ],
+  targets: [
+    .target(
+      name: "O2UIToolkit",
+      resources: [
+        .copy("Theme/Resources/Colors/Colors.xcassets"),
+        .process("Theme/Resources/FontResources")
+      ]
+    ),
+    .testTarget(
+      name: "O2UIToolkitTests",
+      dependencies: ["O2UIToolkit"],
+    ),
+  ]
 )
