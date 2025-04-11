@@ -5,8 +5,6 @@ public struct InputViewActionButtonConfiguration {
   let icon: Image
   let onTap: () -> Void
 
-  /// Configuration of trailing button, the button is removed when set to nil. Defaults to nil.
-  ///
   /// - Parameters:
   ///    - icon: Icon of the trailing button.
   ///    - onTap: Trailing buttons action.
@@ -21,26 +19,51 @@ public struct InputViewActionButtonConfiguration {
 
 struct InputViewActionButton: View {
   let configuration: InputViewActionButtonConfiguration
+  let isFocused: Bool
 
   var body: some View {
     Button {
       configuration.onTap()
     } label: {
-      configuration.icon
+      let icon = configuration.icon
         .resizable()
         .scaledToFit()
-        .frame(width: 32, height: 32)
+        .padding(.Spacing.XS)
+
+      ZStack {
+        icon
+          .tint(Color.Surface.xHigh)
+
+        if isFocused {
+          icon
+            .tint(Color.State.Default.focus)
+        }
+      }
     }
+    .frame(width: 32, height: 32)
   }
 }
 
+// MARK: - Previews
+
 #if DEBUG
-#Preview {
+#Preview("Plain") {
   InputViewActionButton(
     configuration: .init(
       icon: Image(systemName: "heart.fill"),
       onTap: { }
-    )
+    ),
+    isFocused: false
+  )
+}
+
+#Preview("Focused") {
+  InputViewActionButton(
+    configuration: .init(
+      icon: Image(systemName: "heart.fill"),
+      onTap: { }
+    ),
+    isFocused: true
   )
 }
 #endif
